@@ -27,4 +27,9 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="microsoft.ml.onnxruntime" Version="1.5.2" />
+    <PackageReference Include="microsoft.ml.onnxruntime.gpu" Version="1.5.2" />
+  </ItemGroup>
+
 </Project>

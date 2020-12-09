@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.ML.OnnxRuntime;
+using Microsoft.ML.OnnxRuntime.Tensors;
 
 namespace SimulatorWithONNX
 {
@@ -27,6 +29,9 @@ namespace SimulatorWithONNX
             List<(int, int, int, int, int, int, int, double, double, double, int)> records4 = new List<(int, int, int, int, int, int, int, double, double, double, int)>();
             sim.read_info(records4);
             //sim.printList(records4);
+
+            Predictor pred = new Predictor();
+            pred.inference();
 
             sim.simulate(2010, 3);
 
