@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.5.2" />
+    <PackageReference Include="microsoft.ml.onnxruntime.gpu" Version="1.5.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,11 +26,6 @@
     <None Update="data\upupup.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="microsoft.ml.onnxruntime" Version="1.5.2" />
-    <PackageReference Include="microsoft.ml.onnxruntime.gpu" Version="1.5.2" />
   </ItemGroup>
 
 </Project>

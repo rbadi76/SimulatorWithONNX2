@@ -11,7 +11,7 @@ namespace SimulatorWithONNX
        
         public void inference()
         {
-            var session = new InferenceSession("upupup.onnx");
+            var session = new InferenceSession("data/upupup.onnx");
             float[] day1_inputs = {0.0000f,  0.0000f,  8.0000f, -1.0000f,  0.7000f,  0.8286f, -0.4000f,  0.0000f};
             //Console.WriteLine(day1_inputs[0]);
             
