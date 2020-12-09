@@ -30,9 +30,6 @@ namespace SimulatorWithONNX
             sim.read_info(records4);
             //sim.printList(records4);
 
-            Predictor pred = new Predictor();
-            pred.inference();
-
             sim.simulate(2010, 3);
 
         }
