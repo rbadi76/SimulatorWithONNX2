@@ -169,6 +169,7 @@ namespace SimulatorWithONNX
 
             //this.printList(info_daily);
 
+
             HashSet<int> companies = new HashSet<int>();
             HashSet<string> sectors = new HashSet<string>();
 
@@ -187,7 +188,8 @@ namespace SimulatorWithONNX
             }*/
             int num_companies = companies.Count();
 
-            // TODO: Call predictor
+            //Call predictor
+            Predictor pred = new Predictor();
 
             // Add here reference to Predictor class
 
@@ -198,6 +200,7 @@ namespace SimulatorWithONNX
             for (int i = 0; i < info_daily.Count(); i = i + num_companies)
             {
                 List<(int, int, int, int, int, int, int, double, double, double, int)> daily = info_daily.GetRange(i, num_companies);
+                
                 List<double> current_stock_prices = new List<double>();
 
                 for (int j = 0; j < num_companies; j++)
@@ -214,6 +217,7 @@ namespace SimulatorWithONNX
                         quarterly.Add(market_analysis[idx]);
                     }
                     //this.printList(quarterly);
+
                     if(previous_stock_prices.Count() > 0)
                     {
                         List<bool> increased = new List<bool>();
@@ -222,7 +226,8 @@ namespace SimulatorWithONNX
                             increased.Add(current_stock_prices[c] > previous_stock_prices[c]);
                         }
 
-                        (bool, bool, bool) y = (true, false, true); // TODO: Call predictor
+                        List<bool> y_list= pred.inference(daily);
+                        (bool, bool, bool) y = (y_list[0], y_list[1], y_list[2]);
 
                         string s = String.Format("Predictions (year, day): {0} {1} {2} Target: ({3}, {4}, {5})", daily[0].Item2, daily[0].Item3, y, increased[0], increased[1], increased[2]);
                         Console.WriteLine(s);
