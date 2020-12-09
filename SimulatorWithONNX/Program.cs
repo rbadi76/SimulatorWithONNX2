@@ -28,7 +28,7 @@ namespace SimulatorWithONNX
             sim.read_info(records4);
             //sim.printList(records4);
 
-            sim.simulate(2019, 3);
+            sim.simulate(2010, 3);
 
         }
     }

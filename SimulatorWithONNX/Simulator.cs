@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace SimulatorWithONNX
 {
@@ -62,17 +62,27 @@ namespace SimulatorWithONNX
             }
         }
 
-       /* public int find(List<(string, int, int, int)> data, List<(int, int, string)> keyList, (int, int, string) key)
+        public int find<V, T>(List<V> data, List<int> keyList, T key)
         {
             for(int i=0; i < data.Count(); i++)
             {
-                if(keyList[data[i]] == key)
+                int num_correct = 0;
+                for(int j=0; j< keyList.Count(); j++)
+                {
+                    var t1 = ((ITuple)data[i])[keyList[j]];
+                    var t2 = ((ITuple)key)[j];
+                    if (t1.Equals(t2))
+                    {
+                        num_correct++;
+                    }
+                }
+                if (num_correct == keyList.Count())
                 {
                     return i;
                 }
             }
             throw new ArgumentException("Value not found.");
-        }*/
+        }
 
         public void simulate(int start_year, int start_day)
         {
@@ -119,6 +129,10 @@ namespace SimulatorWithONNX
                     return result;
                 });
 
+            List<int> key_market_analysis = new List<int>();
+            key_market_analysis.Add(1);
+            key_market_analysis.Add(2);
+            key_market_analysis.Add(0);
             //this.printList(market_analysis);
 
             // Market segments
@@ -153,9 +167,80 @@ namespace SimulatorWithONNX
                     return result;
                 });
 
-            this.printList(info_daily);
+            //this.printList(info_daily);
 
+            HashSet<int> companies = new HashSet<int>();
+            HashSet<string> sectors = new HashSet<string>();
 
+            foreach((int, string) record in market_segments)
+            {
+                companies.Add(record.Item1);
+                sectors.Add(record.Item2);
+            }
+            /*foreach(var comp in companies)
+            {
+                Console.WriteLine(comp);
+            }
+            foreach (var sec in sectors)
+            {
+                Console.WriteLine(sec);
+            }*/
+            int num_companies = companies.Count();
+
+            // TODO: Call predictor
+
+            // Add here reference to Predictor class
+
+            double total = 0;
+            double correct = 0;
+            List<double> previous_stock_prices = new List<double>();
+
+            for (int i = 0; i < info_daily.Count(); i = i + num_companies)
+            {
+                List<(int, int, int, int, int, int, int, double, double, double, int)> daily = info_daily.GetRange(i, num_companies);
+                List<double> current_stock_prices = new List<double>();
+
+                for (int j = 0; j < num_companies; j++)
+                {
+                    current_stock_prices.Add(stock_prices[i + j].Item5);
+                }
+                if (daily[0].Item2 >= start_year && daily[0].Item3 >= start_day)
+                {
+                    List<(string, int, int, int)> quarterly = new List<(string, int, int, int)>();
+                    foreach(var s in sectors)
+                    {
+                        (int, int, string) key = (daily[0].Item2, daily[0].Item4, s);
+                        int idx = this.find(market_analysis, key_market_analysis, key);
+                        quarterly.Add(market_analysis[idx]);
+                    }
+                    //this.printList(quarterly);
+                    if(previous_stock_prices.Count() > 0)
+                    {
+                        List<bool> increased = new List<bool>();
+                        for(int c = 0; c<num_companies;c++)
+                        {
+                            increased.Add(current_stock_prices[c] > previous_stock_prices[c]);
+                        }
+
+                        (bool, bool, bool) y = (true, false, true); // TODO: Call predictor
+
+                        string s = String.Format("Predictions (year, day): {0} {1} {2} Target: ({3}, {4}, {5})", daily[0].Item2, daily[0].Item3, y, increased[0], increased[1], increased[2]);
+                        Console.WriteLine(s);
+
+                        for(int c = 0; c < num_companies; c++)
+                        {
+                            if((bool)((ITuple)y)[c] == increased[c])
+                            {
+                                correct++;
+                            }
+                            total++;
+                        }
+                    }
+                }
+                previous_stock_prices = current_stock_prices.ToList();
+            }
+            if(total != 0)
+                Console.WriteLine(String.Format("Accuracy(%) = {0}", 100 * correct / total));          
         }
 
         public void printList<T>(IList<T> list)
