@@ -21,7 +21,7 @@ namespace SimulatorWithONNX
                 float[] ci = { daily[i].Item5, daily[i].Item6, daily[i].Item7, 0f, (float)(daily[i].Item8 + 10 / 20), (float)(daily[i].Item9 / 9994), (float)daily[i].Item10, daily[i].Item11  };
 
                 var session = new InferenceSession("data/upupup.onnx");
-                float[] day1_inputs = {0.0000f,  0.0000f,  8.0000f, -1.0000f,  0.7000f,  0.8286f, -0.4000f,  0.0000f};
+                //float[] day1_inputs = {0.0000f,  0.0000f,  8.0000f, -1.0000f,  0.7000f,  0.8286f, -0.4000f,  0.0000f};
 
                 var inputMeta = session.InputMetadata;
                 var container = new List<NamedOnnxValue>();

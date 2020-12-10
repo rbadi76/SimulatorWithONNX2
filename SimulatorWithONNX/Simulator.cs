@@ -191,8 +191,6 @@ namespace SimulatorWithONNX
             //Call predictor
             Predictor pred = new Predictor();
 
-            // Add here reference to Predictor class
-
             double total = 0;
             double correct = 0;
             List<double> previous_stock_prices = new List<double>();
